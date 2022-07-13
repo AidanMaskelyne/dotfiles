@@ -1,0 +1,37 @@
+import:
+  - ~/.config/alacritty/dracula.yml
+
+font:
+  normal:
+    family: Jetbrains Mono
+    style: Regular
+
+  bold:
+    family: Jetbrains Mono
+    style: Bold
+
+  italic:
+    family: Jetbrains Mono
+    style: Italic
+
+  bold_italic:
+    family: Jetbrains Mono
+    style: Bold Italic
+
+  size: 12.0
+  draw_bold_text_with_bright_colors: true
+
+window:
+  padding:
+    x: 6
+    y: 6
+
+  dynamic_padding: false
+
+  opacity: 0.80
+
+  decorations: full
+  startup_mode: Maximized
+
+cursor:
+  style: Block

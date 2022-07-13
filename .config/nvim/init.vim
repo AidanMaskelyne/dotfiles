@@ -11,6 +11,8 @@ call plug#begin(has('nvim') ? stdpath('data') . './plugged' : '~/.vim/plugged')
 	Plug 'hrsh7th/nvim-cmp'
 	Plug 'onsails/lspkind.nvim'
 
+	Plug 'nvim-treesitter/nvim-treesitter'
+
 	" vsnip
 	Plug 'hrsh7th/cmp-vsnip'
 	Plug 'hrsh7th/vim-vsnip'
@@ -42,6 +44,15 @@ lua <<EOF
 	local cmp = require'cmp'
 
 	cmp.setup({
+
+		enabled = function()
+			if require"cmp.config.context".in_treesitter_capture("comment")==true or require"cmp.config.context".in_syntax_group("Comment") then
+				return false
+			else
+				return true
+			end
+		end,
+
 		view = {
 			-- entries = "native"		
 		},
@@ -108,8 +119,21 @@ lua <<EOF
 
 	-- Setup lspconfig.
 	local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+	capabilities.textDocument.completion.completionItem.snippetSupport = true
 	-- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
 	require('lspconfig')['rust_analyzer'].setup {
+		capabilities = capabilities
+	}
+
+	require'lspconfig'.cssls.setup {
+		capabilities = capabilities
+	}
+	
+	require'lspconfig'.tailwindcss.setup {
+		capabilities = capabilities
+	}
+
+	require'lspconfig'.cssmodules_ls.setup {
 		capabilities = capabilities
 	}
 EOF

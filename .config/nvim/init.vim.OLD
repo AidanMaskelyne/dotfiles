@@ -1,0 +1,9 @@
+set tabstop=4
+set shiftwidth=4
+set smartcase
+set noexpandtab
+
+set number
+
+" Stop rust from enforcing 4 space indentation
+let g:rust_recommended_stype=0

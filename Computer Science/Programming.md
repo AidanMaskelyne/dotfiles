@@ -1,3 +1,0 @@
-# Programming
-- [[Searches]]
-- [[File IO]]

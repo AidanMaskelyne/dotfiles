@@ -1,0 +1,55 @@
+general {
+	colors = true
+	color_good = "#27AE60"
+	color_degraded = "#F67400"
+	color_bad = "#DA4453"
+	interval = 1
+	separator = "|"
+}
+
+order += "wireless _first_"
+order += "ethernet _first_"
+order += "battery _first_"
+order += "volume master"
+order += "cpu_usage"
+order += "memory"
+order += "time"
+
+wireless _first_ {
+	format_up = "W: (%quality at %essid, %bitrate) %ip"
+	format_down = "W: down"
+}
+
+ethernet _first_ {
+	format_up = "E: %ip (%speed)"
+	format_down = "E: down"
+}
+
+battery _first_ {
+	format = "BAT: %percentage"
+	integer_battery_capacity = true
+	path = "/sys/class/power_supply/BAT1/uevent"
+	low_threshold = 20
+}
+
+volume master {
+	device = "pulse"
+	format = "VOL: %volume"
+	format_muted = "VOL: muted"
+	mixer = "Master"
+	mixer_idx = 0
+}
+
+cpu_usage {
+	format = "CPU: %usage"
+}
+
+memory {
+	format = "MEM: %used"
+	threshold_degraded = "10%"
+	format_degraded = "MEMORY: %free"
+}
+
+time {
+	format = "%Y-%m-%d %H:%M:%S %Z"
+}

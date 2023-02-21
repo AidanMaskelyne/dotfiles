@@ -28,33 +28,32 @@ exec --no-startup-id dex --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-# exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
-bindsym $mod+Shift+l exec --no-startup-id $HOME/.config/i3/scripts/lock.sh
-
-# Start applets for the system tray (bottom right)
-exec --no-startup-id nm-applet --sm-disable
+# NetworkManager is the most popular way to manage wireless networks on Linux,
+# and nm-applet is a desktop environment-independent system tray GUI for it.
+exec --no-startup-id nm-applet
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
-#bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer -i 5 && $refresh_i3status
-#bindsym XF86AudioLowerVolume exec --no-startup-id pamixer -d 5 && $refresh_i3status
-#bindsym XF86AudioMute exec --no-startup-id pamixer -t && $refresh_i3status
-# bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
-
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
-# Use xbrightness to change the brightness when the keys are pressed
-bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 5
-bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 5
+# Use xbacklight to adjust screen brightness
+bindsym XF86MonBrightnessUp exec --no-startup-id light -A 5 && $refresh_i3status
+bindsym XF86MonBrightnessDown exec --no-startup-id light -U 5 && $refresh_i3status
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# move tiling windows via drag & drop by left-clicking into the title bar,
+# or left-clicking anywhere into the window while holding the floating modifier.
+tiling_drag modifier titlebar
+
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -78,6 +77,12 @@ bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+semicolon move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -182,30 +187,24 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Launch polybar on setp using a shell file
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+        position top
+        status_command i3status
+#         status_command exec $HOME/.scripts/i3status-brightness.sh
+#         status_command i3blocks
+}
 
-## Colour Palette
-# class					border  bground text	indicator child_border
-client.focused			#3DAEE9 #31363B #EFF0F1 #31363B	  #31363B
-client.focused_inactive #3B4045 #3B4045 #EFF0F1 #3B4045	  #3B4045
-client.unfocused		#31363B #31363B #EFF0F1 #3B4045	  #3B4041
-client.urgent			#3B4045 #DA4453 #EFF0F1 #DA4453	  #DA4453
-client.placeholder		#31363B #31363B #EFF0F1 #3B4045	  #3B4041
-
-client.background		#EFF0F1
-
-
-# Load wallpaper
+# Restore wallpaper
 exec --no-startup-id nitrogen --restore &
 
-# Remove all window border in order to look better with gaps
-for_window [class=".*"] border pixel 0
+# Start picom & disable it's fading animations
+exec --no-startup-id picom --no-fading-openclose --fade-in-step=1 --fade-out-step=1 --fade-delta=0 &
 
-# Gap settings
-gaps inner 8
+# Remove all titlebars from windows except a 2 pixel border & add gaps
+for_window [class=".*"] border pixel 2
+gaps inner 8px
 
-# Pressing Print will launch flameshot
-bindsym "Print" exec flameshot gui
-
-exec --no-startup-id systemctl --user restart pipewire.service
+# Start i3-alternating-layout
+exec --no-startup-id /usr/lib/i3-alternating-layout/alternating_layouts.py

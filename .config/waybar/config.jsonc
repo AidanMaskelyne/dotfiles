@@ -8,15 +8,13 @@
         "tray",
         "custom/caffeine",
         "custom/updates",
-        "custom/language",
         "network",
         "backlight",
         "pulseaudio",
         "battery"
     ],
-
     "hyprland/window": {
-        "format": "{}"
+        "format": "{title}",
     },
     "wlr/workspaces": {
         "disable-scroll": true,
@@ -42,16 +40,6 @@
         "interval": 3,
         "format-icons": ["﯈", ""],
         "format": "{icon}"
-    },
-    "custom/updates": {
-        "exec": "(checkupdates ; paru -Qua) | wc -l",
-        "interval": 7200,
-        "format": " {}"
-    },
-    "custom/language": {
-        "exec": "cat /tmp/kb_layout",
-        "interval": 3,
-        "format": " {}"
     },
     "tray": {
         "icon-size": 13,
@@ -92,7 +80,7 @@
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-muted": "ﱝ Muted",
-        "on-click": "/home/amitgold/.config/hypr/scripts/volume_ctl.sh mute",
+        "on-click": "/home/aidan/.config/hypr/scripts/volume_ctl.sh mute",
         "scroll-step": 1,
         "format-icons": {
             "headphone": "",

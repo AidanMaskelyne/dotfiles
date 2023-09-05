@@ -2,6 +2,8 @@
 
 I am switching to Wayland, but still keeping dotfiles for programs such as i3 in my config still.
 
+**Before cloning, `~/.config/nvim/` must be empty/not exist**
+
 ## Environment Variables
 Append to `/etc/environment`:
 ```
@@ -37,11 +39,13 @@ SDL_VIDEODRIVER=wayland
 - Regenerate the grub config with `sudo grub-mkconfig -o /boot/grub/grub.cfg`
 
 ## AstroNvim
+Both [AstroNvim](https://github.com/AstroNvim/AstroNvim) and my [AstroNvim config](https://github.com/AidanMaskelyne/astronvim_config) are added as submodules, and will automatically be cloned into the correct places, provided `~/.config/nvim/` is empty.
+
 Clean neovim folders & make a backup of current config:
 ```
-❯ mv ~/.config/nvim ~/.config/nvim.bak
-❯ mv ~/.local/share/nvim ~/.local/share/nvim.bak
-❯ mv ~/.local/state/nvim ~/.local/state/nvim.bak
-❯ mv ~/.cache/nvim ~/.cache/nvim.bak
-❯ git clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+$ mv ~/.config/nvim ~/.config/nvim.bak
+$ mv ~/.local/share/nvim ~/.local/share/nvim.bak
+$ mv ~/.local/state/nvim ~/.local/state/nvim.bak
+$ mv ~/.cache/nvim ~/.cache/nvim.bak
+$ rm -r ~/.config/nvim
 ```
